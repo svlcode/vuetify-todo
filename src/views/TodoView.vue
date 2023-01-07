@@ -76,45 +76,23 @@
     data() {
       return {
         newTaskTitle: null,
-        tasks: [
-          // {
-          //   id: 1,
-          //   title: 'Learn',
-          //   done: false
-          // },
-          // {
-          //   id: 2,
-          //   title: 'Do sport',
-          //   done: true
-          // },
-          // {
-          //   id: 3,
-          //   title: 'Read a book',
-          //   done: false
-          // }
-        ]
       };
     },
     methods: {
       doneTask(id) {
-        const task = this.tasks.find(t => t.id === id);
-        if (task) {
-          task.done = !task.done;
-        }
+       this.$store.commit('doneTask', id);
       },
       deleteTask(id) {
-        this.tasks.splice(this.tasks.indexOf(t => t.id == id), 1)
+        this.$store.commit('deleteTask', id);
       },
       addTask() {
-        if (this.newTaskTitle) {
-          const task = {
-            id: this.tasks.length + 1,
-            title: this.newTaskTitle,
-            done: false
-          };
-          this.tasks.push(task);
-          this.newTaskTitle = null;
-        }
+        this.$store.commit('addTask', this.newTaskTitle);
+        this.newTaskTitle = '';
+      }
+    },
+    computed: {
+      tasks() {
+        return this.$store.state.tasks;
       }
     }
   }
