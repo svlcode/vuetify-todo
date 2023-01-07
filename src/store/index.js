@@ -37,7 +37,7 @@ export default new Vuex.Store({
 		},
 		deleteTask(state, taskId) {
 			state.tasks.splice(
-				state.tasks.indexOf((t) => t.id == taskId),
+				state.tasks.findIndex((t) => t.id == taskId),
 				1
 			);
 		},
