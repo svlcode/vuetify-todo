@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
@@ -22,6 +22,10 @@ export default new Vuex.Store({
 				done: false,
 			},
 		],
+		snackbar: {
+			show: false,
+			text: 'this is my title',
+		},
 	},
 	getters: {},
 	mutations: {
@@ -47,7 +51,33 @@ export default new Vuex.Store({
 				task.done = !task.done;
 			}
 		},
+		showSnackbar(state, text) {
+			let timeout = 0;
+			if (state.snackbar.show) {
+				state.snackbar.show = false;
+				timeout = 300;
+			}
+			setTimeout(() => {
+				state.snackbar.show = true;
+				state.snackbar.text = text;
+			}, timeout);
+		},
+		hideSnackbar(state) {
+			state.snackbar.show = false;
+		},
 	},
-	actions: {},
+	actions: {
+		addTask({ commit }, newTaskTitle) {
+			commit('addTask', newTaskTitle);
+			commit('showSnackbar', `task ${newTaskTitle} was added`);
+		},
+		deleteTask({ commit }, id) {
+			const task = this.state.tasks.find((t) => t.id === id);
+			commit('deleteTask', id);
+			if (task) {
+				commit('showSnackbar', `task ${task.title} was deleted`);
+			}
+		},
+	},
 	modules: {},
 });

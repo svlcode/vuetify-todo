@@ -17,9 +17,7 @@
 				</v-list-item-content>
 
 				<v-list-item-action>
-					<v-btn icon @click.stop="$store.commit('deleteTask', task.id)">
-						<v-icon color="primary lighten-1">mdi-delete</v-icon>
-					</v-btn>
+					<task-menu :task="task" />
 				</v-list-item-action>
 			</template>
 			<v-divider></v-divider>
@@ -32,6 +30,14 @@
 export default {
 	props: {
 		task: Object,
+	},
+	components: {
+		'task-menu': require('@/components/Todo/TaskMenu.vue').default,
+	},
+	methods: {
+		deleteTask() {
+			this.dialogs.delete = true;
+		},
 	},
 };
 </script>
