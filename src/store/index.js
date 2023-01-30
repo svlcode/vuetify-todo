@@ -10,16 +10,19 @@ export default new Vuex.Store({
 				id: 1,
 				title: 'Learn',
 				done: false,
+				dueDate: '2023-01-21',
 			},
 			{
 				id: 2,
 				title: 'Do sport',
 				done: true,
+				dueDate: '2023-02-17',
 			},
 			{
 				id: 3,
 				title: 'Read a book',
 				done: false,
+				dueDate: null,
 			},
 		],
 		snackbar: {
@@ -30,13 +33,24 @@ export default new Vuex.Store({
 	getters: {},
 	mutations: {
 		addTask(state, newTaskTitle) {
-			if (newTaskTitle) {
-				const task = {
-					id: state.tasks.length + 1,
-					title: newTaskTitle,
-					done: false,
-				};
-				state.tasks.push(task);
+			const task = {
+				id: state.tasks.length + 1,
+				title: newTaskTitle,
+				done: false,
+				dueDate: null,
+			};
+			state.tasks.push(task);
+		},
+		updateTask(state, { id, newTaskTitle }) {
+			const task = state.tasks.find((t) => t.id === id);
+			if (task) {
+				task.title = newTaskTitle;
+			}
+		},
+		updateDueDate(state, { id, dueDate }) {
+			const task = state.tasks.find((t) => t.id === id);
+			if (task) {
+				task.dueDate = dueDate;
 			}
 		},
 		deleteTask(state, taskId) {
@@ -69,14 +83,22 @@ export default new Vuex.Store({
 	actions: {
 		addTask({ commit }, newTaskTitle) {
 			commit('addTask', newTaskTitle);
-			commit('showSnackbar', `task ${newTaskTitle} was added`);
+			commit('showSnackbar', `Task ${newTaskTitle} was added`);
 		},
 		deleteTask({ commit }, id) {
 			const task = this.state.tasks.find((t) => t.id === id);
 			commit('deleteTask', id);
 			if (task) {
-				commit('showSnackbar', `task ${task.title} was deleted`);
+				commit('showSnackbar', `Task ${task.title} was deleted`);
 			}
+		},
+		updateTask({ commit }, payload) {
+			commit('updateTask', payload);
+			commit('showSnackbar', `Task updated`);
+		},
+		updateDueDate({ commit }, payload) {
+			commit('updateDueDate', payload);
+			commit('showSnackbar', 'Due Date updated');
 		},
 	},
 	modules: {},

@@ -22,10 +22,20 @@
 				</v-list-item>
 			</v-list>
 		</v-menu>
+		<dialog-edit
+			:task="task"
+			v-if="dialogs.edit"
+			@close="dialogs.edit = false"
+		/>
 		<dialog-delete
 			:task="task"
 			v-if="dialogs.delete"
 			@close="dialogs.delete = false"
+		/>
+		<dialog-due-date
+			:task="task"
+			v-if="dialogs.dueDate"
+			@close="dialogs.dueDate = false"
 		/>
 	</div>
 </template>
@@ -39,10 +49,16 @@ export default {
 				title: 'Edit',
 				icon: 'mdi-pencil',
 				click() {
-					console.log('edit');
+					this.dialogs.edit = true;
 				},
 			},
-			{ title: 'Due date', icon: 'mdi-calendar', click() {} },
+			{
+				title: 'Due date',
+				icon: 'mdi-calendar',
+				click() {
+					this.dialogs.dueDate = true;
+				},
+			},
 			{
 				title: 'Delete',
 				icon: 'mdi-delete',
@@ -53,11 +69,15 @@ export default {
 		],
 		dialogs: {
 			delete: false,
-      edit: false
+			edit: false,
+			dueDate: false,
 		},
 	}),
 	components: {
+		'dialog-edit': require('@/components/Todo/Dialogs/DialogEdit.vue').default,
 		'dialog-delete': require('@/components/Todo/Dialogs/DialogDelete.vue')
+			.default,
+		'dialog-due-date': require('@/components/Todo/Dialogs/DialogDueDate.vue')
 			.default,
 	},
 	methods: {
