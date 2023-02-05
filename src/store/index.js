@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
+		search: null,
 		tasks: [
 			{
 				id: 1,
@@ -32,6 +33,9 @@ export default new Vuex.Store({
 	},
 	getters: {},
 	mutations: {
+		setSearch(state, search) {
+			state.search = search;
+		},
 		addTask(state, newTaskTitle) {
 			const task = {
 				id: state.tasks.length + 1,
@@ -99,6 +103,14 @@ export default new Vuex.Store({
 		updateDueDate({ commit }, payload) {
 			commit('updateDueDate', payload);
 			commit('showSnackbar', 'Due Date updated');
+		},
+	},
+	getters: {
+		tasksFiltered(state) {
+			if (!state.search) return state.tasks;
+			return state.tasks.filter((t) =>
+				t.title.toLowerCase().includes(state.search.toLowerCase())
+			);
 		},
 	},
 	modules: {},
